@@ -3,10 +3,14 @@ package com.appsdeveloperblog.photoapp.api.users.ui.controllers;
 import com.appsdeveloperblog.photoapp.api.users.service.UsersService;
 import com.appsdeveloperblog.photoapp.api.users.shared.UserDto;
 import com.appsdeveloperblog.photoapp.api.users.ui.model.CreateUserRequestModel;
+import com.appsdeveloperblog.photoapp.api.users.ui.model.CreateUserResponseModel;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,13 +30,22 @@ public class UsersController {
         return "Working on post:"+env.getProperty("local.server.port");
     }
 
-    @PostMapping
-    public String createUser(@Valid @RequestBody CreateUserRequestModel userDetail){
+    @PostMapping(
+            consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ResponseEntity createUser(@Valid @RequestBody CreateUserRequestModel userDetail){
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        System.out.println("test");
+
 
         UserDto userDto = modelMapper.map(userDetail, UserDto.class);
-        usersService.createUser(userDto);
-        return "Create user method is called";
+
+        UserDto createdUser = usersService.createUser(userDto);
+        CreateUserResponseModel returnValue = modelMapper.map(createdUser, CreateUserResponseModel.class);
+
+        System.out.println("test");
+        return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
     }
 }
