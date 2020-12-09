@@ -3,15 +3,18 @@ package com.appsdeveloperblog.photoapp.api.users.shared;
 import java.io.Serializable;
 
 public class UserDto implements Serializable {
-
+    /**
+     *
+     */
     private static final long serialVersionUID = 397778790940875898L;
 
     private String firstName;
     private String lastName;
-    private String password;
     private String email;
+    private String password;
     private String userId;
     private String encryptedPassword;
+
 
     public String getFirstName() {
         return firstName;
@@ -29,20 +32,20 @@ public class UserDto implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUserId() {
@@ -60,4 +63,5 @@ public class UserDto implements Serializable {
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
     }
+
 }

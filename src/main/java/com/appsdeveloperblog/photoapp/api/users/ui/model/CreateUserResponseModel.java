@@ -1,9 +1,5 @@
 package com.appsdeveloperblog.photoapp.api.users.ui.model;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 public class CreateUserResponseModel {
     private String firstName;
     private String lastName;
@@ -41,4 +37,5 @@ public class CreateUserResponseModel {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 }

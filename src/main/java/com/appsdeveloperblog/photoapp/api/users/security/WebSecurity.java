@@ -16,15 +16,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private Environment environment;
-
-    @Autowired
     private UsersService usersService;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public WebSecurity(Environment environment, UsersService usersService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurity(Environment environment, UsersService usersService, BCryptPasswordEncoder bCryptPasswordEncoder)
+    {
         this.environment = environment;
         this.usersService = usersService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -33,17 +30,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/**").hasIpAddress(environment.getProperty("gateway.ip"))
+        http.authorizeRequests()
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(getAuthenticationFilter());
         http.headers().frameOptions().disable();
     }
 
-    private AuthenticationFilter getAuthenticationFilter() throws Exception{
+    private AuthenticationFilter getAuthenticationFilter() throws Exception
+    {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(usersService, environment, authenticationManager());
-        //authenticationFilter.setFilterProcessesUrl();
-
         //authenticationFilter.setAuthenticationManager(authenticationManager());
+        authenticationFilter.setFilterProcessesUrl(environment.getProperty("login.url.path"));
         return authenticationFilter;
     }
 
@@ -51,4 +50,5 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(usersService).passwordEncoder(bCryptPasswordEncoder);
     }
+
 }

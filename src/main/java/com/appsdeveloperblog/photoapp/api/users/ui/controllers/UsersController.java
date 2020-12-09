@@ -37,15 +37,12 @@ public class UsersController {
     public ResponseEntity createUser(@Valid @RequestBody CreateUserRequestModel userDetail){
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        System.out.println("test");
-
 
         UserDto userDto = modelMapper.map(userDetail, UserDto.class);
 
         UserDto createdUser = usersService.createUser(userDto);
         CreateUserResponseModel returnValue = modelMapper.map(createdUser, CreateUserResponseModel.class);
 
-        System.out.println("test");
         return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
     }
 }
